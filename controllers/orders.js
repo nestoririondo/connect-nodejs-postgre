@@ -1,4 +1,5 @@
 import pool from "../db/pool.js";
+import { validationResult } from "express-validator";
 
 export const getOrders = async (req, res) => {
   try {
@@ -14,6 +15,7 @@ export const getOrder = async (req, res) => {
   if (!id) {
     return res.status(400).json({ message: "Missing id parameter" });
   }
+
   try {
     const { rows } = await pool.query("SELECT * FROM orders WHERE id=$1", [id]);
     if (rows.length === 0) {
@@ -27,9 +29,14 @@ export const getOrder = async (req, res) => {
 
 export const postOrder = async (req, res) => {
   const { price, date, user_id } = req.body;
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.send({ errors: result.array() });
+  }
   if (!price || !date || !user_id) {
     return res.status(400).json({ message: "Missing required fields" });
   }
+
   try {
     const { rows } = await pool.query(
       "INSERT INTO orders (price, date, user_id) VALUES ($1, $2, $3) RETURNING *",
@@ -44,9 +51,14 @@ export const postOrder = async (req, res) => {
 export const putOrder = async (req, res) => {
   const { id } = req.params;
   const { price, date, user_id } = req.body;
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.send({ errors: result.array() });
+  }
   if (!id || !price || !date || !user_id) {
     return res.status(400).json({ message: "Missing required fields" });
   }
+
   try {
     const { rows } = await pool.query(
       "UPDATE orders SET price = $1, date = $2, user_id = $3 WHERE id=$4 RETURNING *",
