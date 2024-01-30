@@ -23,7 +23,7 @@ export const postOrder = async (req, res) => {
   try {
     const { price, date, user_id } = req.body;
     const { rows } = await pool.query(
-      "INSERT INTO Orders (price, date, user_id) VALUES ($1, $2, $3) RETURNING *",
+      "INSERT INTO orders (price, date, user_id) VALUES ($1, $2, $3) RETURNING *",
       [price, date, user_id]
     );
     res.status(200).json(rows[0]);
@@ -37,7 +37,7 @@ export const putOrder = async (req, res) => {
     const { id } = req.params;
     const { price, date, user_id } = req.body;
     const { rows } = await pool.query(
-      "UPDATE Orders SET price = $1, date = $2, user_id = $3 WHERE id=$4 RETURNING *",
+      "UPDATE orders SET price = $1, date = $2, user_id = $3 WHERE id=$4 RETURNING *",
       [price, date, user_id, id]
     );
     res.status(200).json(rows[0]);

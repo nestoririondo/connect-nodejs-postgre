@@ -62,7 +62,7 @@ export const getUserOrders = async (req, res) => {
   try {
     const { id } = req.params;
     const { rows } = await pool.query(
-      "SELECT orders.* FROM orders INNER JOIN users on orders.user_id = users.id WHERE users.id = $1",
+      "SELECT o.* FROM orders o INNER JOIN users u on o.user_id = u.id WHERE u.id = $1",
       [id]
     );
     res.status(200).json(rows);
