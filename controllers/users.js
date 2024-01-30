@@ -5,7 +5,7 @@ export const getUsers = async (req, res) => {
     const { rows } = await pool.query("SELECT * FROM users");
     res.status(200).json(rows);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -15,7 +15,7 @@ export const getUser = async (req, res) => {
     const { rows } = await pool.query("SELECT * FROM users WHERE id=$1", [id]);
     res.status(200).json(rows[0]);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 export const postUser = async (req, res) => {
@@ -27,7 +27,7 @@ export const postUser = async (req, res) => {
     );
     res.status(200).json(rows[0]);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -41,7 +41,7 @@ export const putUser = async (req, res) => {
     );
     res.status(200).json(rows[0]);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -54,7 +54,7 @@ export const deleteUser = async (req, res) => {
     );
     res.status(200).json(rows[0]);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -67,7 +67,7 @@ export const getUserOrders = async (req, res) => {
     );
     res.status(200).json(rows);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -83,6 +83,6 @@ export const putUserInactive = async (req, res) => {
     );
     res.status(200).json(rows[0]);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };

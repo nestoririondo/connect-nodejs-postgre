@@ -5,7 +5,7 @@ export const getOrders = async (req, res) => {
     const { rows } = await pool.query("SELECT * FROM orders");
     res.status(200).json(rows);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -15,7 +15,7 @@ export const getOrder = async (req, res) => {
     const { rows } = await pool.query("SELECT * FROM orders WHERE id=$1", [id]);
     res.status(200).json(rows[0]);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -28,7 +28,7 @@ export const postOrder = async (req, res) => {
     );
     res.status(200).json(rows[0]);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -42,7 +42,7 @@ export const putOrder = async (req, res) => {
     );
     res.status(200).json(rows[0]);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -52,6 +52,6 @@ export const deleteOrder = async (req, res) => {
     const { rows } = await pool.query("DELETE FROM orders WHERE id=$1 RETURNING *", [id]);
     res.status(200).json(rows[0]);
   } catch (error) {
-    res.status(404).json(error.message);
+    res.status(500).json(error.message);
   }
 };
