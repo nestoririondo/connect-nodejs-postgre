@@ -1,5 +1,11 @@
 import pool from "../db/pool.js";
-import { validationResult } from "express-validator";
+import { body, validationResult } from "express-validator";
+
+export const orderValidator = () => [
+  body("date").notEmpty().isISO8601(),
+  body("user_id").notEmpty().isNumeric(),
+  body("price").notEmpty().isNumeric(),
+];
 
 export const getOrders = async (req, res) => {
   try {
@@ -33,9 +39,6 @@ export const postOrder = async (req, res) => {
   if (!result.isEmpty()) {
     return res.send({ errors: result.array() });
   }
-  if (!price || !date || !user_id) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
 
   try {
     const { rows } = await pool.query(
@@ -54,9 +57,6 @@ export const putOrder = async (req, res) => {
   const result = validationResult(req);
   if (!result.isEmpty()) {
     return res.send({ errors: result.array() });
-  }
-  if (!id || !price || !date || !user_id) {
-    return res.status(400).json({ message: "Missing required fields" });
   }
 
   try {

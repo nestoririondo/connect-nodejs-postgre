@@ -7,24 +7,10 @@ import {
   deleteUser,
   getUserOrders,
   putUserInactive,
+  userValidator,
 } from "../controllers/users.js";
-import { body } from "express-validator";
 
 const usersRouter = express.Router();
-
-const userValidator = () => [
-  body("first_name").notEmpty().isString().trim().escape(),
-  body("last_name").notEmpty().isString().trim().escape(),
-  body("age")
-    .notEmpty()
-    .isInt()
-    .custom((age) => {
-      if (typeof age !== "number") {
-        return new Error("Please input integer as a numeric.");
-      }
-      return true;
-    }),
-];
 
 usersRouter.get("/", getUsers);
 usersRouter.get("/:id", getUser);

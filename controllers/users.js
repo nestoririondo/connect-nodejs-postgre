@@ -1,5 +1,11 @@
 import pool from "../db/pool.js";
-import { validationResult } from "express-validator";
+import { body, validationResult } from "express-validator";
+
+export const userValidator = () => [
+  body("first_name").notEmpty().isString().trim().escape(),
+  body("last_name").notEmpty().isString().trim().escape(),
+  body("age").notEmpty().isInt({ min: 1 }),
+];
 
 export const getUsers = async (req, res) => {
   try {
@@ -29,9 +35,10 @@ export const getUser = async (req, res) => {
 export const postUser = async (req, res) => {
   const { first_name, last_name, age } = req.body;
   const result = validationResult(req);
-  if(!result.isEmpty()) { // means there are errors
+  if (!result.isEmpty()) {
+    // means there are errors
     return res.send({ errors: result.array() });
-  };
+  }
 
   try {
     const { rows } = await pool.query(
@@ -48,9 +55,9 @@ export const putUser = async (req, res) => {
   const { id } = req.params;
   const { first_name, last_name, age } = req.body;
   const result = validationResult(req);
-  if(!result.isEmpty()) {
+  if (!result.isEmpty()) {
     return res.send({ errors: result.array() });
-  };
+  }
   if (!id) {
     return res.status(400).json({ message: "Missing id parameter" });
   }
@@ -134,7 +141,7 @@ export const putUserInactive2 = async (req, res) => {
   if (!id) {
     return res.status(400).json({ message: "Missing id parameter" });
   }
-  
+
   try {
     const { orders } = await pool.query(
       `SELECT * FROM orders WHERE user_id = $1`,
